@@ -13,15 +13,15 @@
  * limitations under the License.
  */
 
-import { ScenarioConfig } from '../../common.js';
-import { spawnSync } from 'child_process';
+import {spawnSync} from 'child_process';
 
-export const rendererOffline = async (
-  scenario: ScenarioConfig | null,
-  rendererCommand: string,
-  rendererArgs: string[],
-  outputFile: string): Promise<void> => {
+import {ScenarioConfig} from '../../common.js';
 
+export const rendererOffline = async(
+    scenario: ScenarioConfig|null,
+    rendererCommand: string,
+    rendererArgs: string[],
+    outputFile: string): Promise<void> => {
   if (scenario == null) {
     throw new Error(' Scenario not specified!');
   }
@@ -30,22 +30,18 @@ export const rendererOffline = async (
     throw new Error(' Output file not specified!');
   }
 
-  let renderConfig = {
-    scenario: scenario,
-    outputFile: outputFile
-  }
+  let renderConfig = {scenario: scenario, outputFile: outputFile}
 
   const args = rendererArgs.concat([JSON.stringify(renderConfig)])
   const result = spawnSync(rendererCommand, args);
-  
-  if(result.error) { // handle issues with the external process 
+
+  if (result.error) {  // handle issues with the external process
     console.error(result.error);
     throw new Error();
-  } 
-  else if(result.status != 0) { // handle renderer issues
+  } else if (result.status != 0) {  // handle renderer issues
     throw new Error(result.stderr.toString());
-  } else { // succceed!
-    console.log("done!\n")
+  } else {  // succceed!
+    console.log('done!\n')
     console.log(result.stdout.toString());
   }
 };

@@ -37,8 +37,7 @@ export const rendererScreenshot = async(
   const screenshotCreator = new ArtifactCreator(
       config,
       rootDirectory,
-      `http://localhost:${port}/packages/render-fidelity-tools/test/renderers/${
-          renderer}/`);
+      `http://localhost:${port}/test/renderers/${renderer}/`);
 
   if (scenarioName == null) {
     throw new Error(' Scenario name not specified!');
@@ -49,7 +48,7 @@ export const rendererScreenshot = async(
   }
 
   try {
-    await screenshotCreator.captureScreenshot( 
+    await screenshotCreator.captureScreenshot(
         renderer, scenarioName, dimensions, outputFile, -1, quiet);
   } finally {
     server.close();
