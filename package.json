@@ -1,5 +1,5 @@
 {
-  "name": "KHR-render-fidelity-tools",
+  "name": "khr-render-fidelity-tools",
   "type": "module",
   "private": true,
   "version": "0.0.1",
@@ -9,7 +9,7 @@
     "test:ci": "./scripts/ci-check-fidelity.sh",
     "render-goldens": "node --experimental-modules ./lib/workflows/render-goldens.js --config=./test/config.json",
     "build": "tsc && rollup -c",
-    "prepare": "if [ ! -L './shared-assets' ]; then ln -s ../shared-assets ./shared-assets; fi",
+    "prepare": "scripts/fetch-khronos-gltf-samples.sh",
     "clean": "rm -rf ./dist ./lib ./test/results ./test/renderers/filament/{cmgen,ktx}"
   },
   "contributors": [
