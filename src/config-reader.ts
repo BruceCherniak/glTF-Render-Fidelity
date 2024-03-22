@@ -16,7 +16,7 @@
 import {Dimensions, ImageComparisonConfig, RendererConfig, ScenarioConfig} from './common.js';
 
 const defaultScenario = {
-  lighting: '../../../shared-assets/environments/lightroom_14b.hdr',
+  lighting: '../../../environments/lightroom_14b.hdr',
   dimensions: {width: 768, height: 768},
   target: {x: 0, y: 0, z: 0},
   orbit: {theta: 0, phi: 90, radius: 1},

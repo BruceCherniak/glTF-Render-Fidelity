@@ -141,7 +141,7 @@ Example configuration:
 ```json
 { 
   "scenario": {
-    "lighting": "../../../shared-assets/environments/lightroom_14b.hdr",
+    "lighting": "../../../environments/lightroom_14b.hdr",
     "dimensions": {
       "width": 768,
       "height": 450
@@ -159,7 +159,7 @@ Example configuration:
     "verticalFoV": 45,
     "renderSkybox": False,
     "name": "khronos-SheenChair",
-    "model": "../../../shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb"
+    "model": "../../../glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb"
   },
   "outputFile": "./test/goldens/khronos-SheenChair/stellar-golden.png"
 }

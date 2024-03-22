@@ -106,7 +106,7 @@ async function main() {
       config,
       rootDirectory,
       `http://localhost:${args.port}/test/renderers/${args.renderer}/`);
-  const server = HTTPServer.createServer({root: '../../', cache: -1});
+  const server = HTTPServer.createServer({root: '', cache: -1});
   server.listen(args.port);
 
   try {

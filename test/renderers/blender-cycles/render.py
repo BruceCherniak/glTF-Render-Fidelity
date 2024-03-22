@@ -104,7 +104,7 @@ def main():
         Example:
         {
           "scenario": {
-            "lighting": "../../../shared-assets/environments/lightroom_14b.hdr",
+            "lighting": "../../../environments/lightroom_14b.hdr",
             "dimensions": {
               "width": 768,
               "height": 450
@@ -122,7 +122,7 @@ def main():
             "verticalFoV": 45,
             "renderSkybox": False,
             "name": "khronos-SheenChair",
-            "model": "../../../shared-assets/models/glTF-Sample-Models/2.0/SheenChair/glTF-Binary/SheenChair.glb"
+            "model": "../../../glTF-Sample-Models/2.0/SheenChair/glTF-Binary/SheenChair.glb"
           },
           "outputFile": "../../../test/goldens/khronos-SheenChair/stellar-golden.png"
         }
