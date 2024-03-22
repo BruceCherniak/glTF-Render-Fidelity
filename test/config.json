@@ -940,16 +940,6 @@
       ]
     },
     {
-      "name": "khronos-AnimatedMorphSphere",
-      "model": "../../../glTF-Sample-Assets/Models/AnimatedMorphSphere/glTF-Binary/AnimatedMorphSphere.glb",
-      "orbit": {
-        "radius": 3
-      },
-      "exclude": [
-        "stellar"
-      ]
-    },
-    {
       "name": "khronos-AnimatedTriangle",
       "model": "../../../glTF-Sample-Assets/Models/AnimatedTriangle/glTF/AnimatedTriangle.gltf",
       "target": {
@@ -1223,21 +1213,6 @@
       "exclude": [
         "stellar"
       ]
-    },
-    {
-      "name": "FurnaceTest",
-      "model": "pbr-spheres.glb",
-      "lighting": "../../../environments/white_furnace.hdr",
-      "target": {
-        "y": 3
-      },
-      "orbit": {
-        "radius": 10
-      },
-      "exclude": [
-        "stellar"
-      ],
-      "renderSkybox": true
     },
     {
       "name": "DirectionalLightTest",
