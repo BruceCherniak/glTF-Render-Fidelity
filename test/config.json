@@ -562,16 +562,6 @@
       ]
     },
     {
-      "name": "AlphaBlendLitmusTest",
-      "model": "alpha-blend-litmus.glb",
-      "orbit": {
-        "radius": 11
-      },
-      "exclude": [
-        "stellar"
-      ]
-    },
-    {
       "name": "khronos-AlphaBlendModeTest",
       "model": "../../../glTF-Sample-Assets/Models/AlphaBlendModeTest/glTF-Binary/AlphaBlendModeTest.glb",
       "dimensions": {
