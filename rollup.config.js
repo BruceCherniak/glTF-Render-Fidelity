@@ -27,8 +27,7 @@ const onwarn = (warning, warn) => {
 };
 
 const plugins = [
-  commonjs(),
-  resolve({preferBuiltins: true, browser: true}),
+  commonjs(), resolve({preferBuiltins: true, browser: true}),
   replace({'Reflect.decorate': 'undefined'}),
   externalGlobals({filament: 'Filament'})
 ];
@@ -60,11 +59,9 @@ const outputOptions = [
   buildTarget('./lib/components/renderer-harness.js', 'esm'),
   buildTarget('./lib/components/renderers/filament-viewer.js', 'esm'),
   buildTarget('./lib/components/renderers/babylon-viewer.js', 'esm'),
-  // disabled until resolved: https://github.com/google/model-viewer/pull/3513
-  // buildTarget('./lib/components/renderers/rhodonite-viewer.js', 'esm'),
-  // buildTarget('./lib/components/renderers/dspbr-pt-viewer.js', 'esm'),
   buildTarget('./lib/components/renderers/gltf-sample-viewer.js', 'esm'),
-  buildTarget('./lib/components/renderers/three-gpu-pathtracer-viewer.js', 'esm'),
+  buildTarget(
+      './lib/components/renderers/three-gpu-pathtracer-viewer.js', 'esm'),
   buildTarget('./lib/image-comparison-worker.js', 'iife')
 ];
 
