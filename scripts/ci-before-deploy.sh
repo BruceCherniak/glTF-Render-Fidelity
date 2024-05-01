@@ -22,12 +22,12 @@ set -x
 pushd $(dirname $0)/..
 
 PACKAGE_ROOT=`pwd`
-DEPLOY_ROOT=$PACKAGE_ROOT/dist
+DEPLOY_ROOT=$PACKAGE_ROOT/pages
 
 set -x
 
 # Copy the latest fidelity testing results:
-mkdir -p $DEPLOY_ROOT/dist
+mkdir -p $DEPLOY_ROOT/pages
 
 mv test/results $DEPLOY_ROOT/results
 cp test/results-viewer.html $DEPLOY_ROOT/index.html
