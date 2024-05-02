@@ -27,9 +27,9 @@ DEPLOY_ROOT=$PACKAGE_ROOT/pages
 set -x
 
 # Copy the latest fidelity testing results:
-mv test/results $DEPLOY_ROOT/results
+mv test/results $DEPLOY_ROOT/
 cp test/results-viewer.html $DEPLOY_ROOT/index.html
-cp dist $DEPLOY_ROOT/dist
+cp dist $DEPLOY_ROOT/
 
 # Add a "VERSION" file containing the last git commit message
 git log -n 1 > $DEPLOY_ROOT/VERSION
