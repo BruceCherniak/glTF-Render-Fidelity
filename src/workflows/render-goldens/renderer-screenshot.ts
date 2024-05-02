@@ -30,7 +30,7 @@ export const rendererScreenshot = async(
     port: number = 9040,
     quiet: boolean = false): Promise<void> => {
   const dimensions = {width, height};
-  const server = HTTPServer.createServer({root: '../../', cache: -1});
+  const server = HTTPServer.createServer({root: '', cache: -1});
 
   server.listen(port);
 
