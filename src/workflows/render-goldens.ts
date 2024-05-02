@@ -279,7 +279,7 @@ async function main() {
           try {
             await rendererScreenshot(
                 config,
-                resolve(dirname(configPath)),
+                rootDirectory,
                 rendererName,
                 scenarioName,
                 goldenPath,
