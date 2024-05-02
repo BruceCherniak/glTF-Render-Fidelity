@@ -29,7 +29,7 @@ set -x
 # Copy the latest fidelity testing results:
 mv test/results $DEPLOY_ROOT/
 cp test/results-viewer.html $DEPLOY_ROOT/index.html
-cp dist $DEPLOY_ROOT/
+cp -r dist $DEPLOY_ROOT/
 
 # Add a "VERSION" file containing the last git commit message
 git log -n 1 > $DEPLOY_ROOT/VERSION
