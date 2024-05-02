@@ -27,6 +27,7 @@ DEPLOY_ROOT=$PACKAGE_ROOT/pages
 set -x
 
 # Copy the latest fidelity testing results:
+mkdir $DEPLOY_ROOT/results
 mv test/results $DEPLOY_ROOT/results/
 cp test/results-viewer.html $DEPLOY_ROOT/index.html
 cp -r dist $DEPLOY_ROOT/
