@@ -23,14 +23,15 @@ pushd $(dirname $0)/..
 
 PACKAGE_ROOT=`pwd`
 mkdir pages
+mkdir pages/comparison
 DEPLOY_ROOT=$PACKAGE_ROOT/pages
 
 set -x
 
 # Copy the latest fidelity testing results:
-mkdir pages/results
-mv test/results $DEPLOY_ROOT/
-cp test/results-viewer.html $DEPLOY_ROOT/index.html
+mkdir pages/comparison/results
+mv test/results $DEPLOY_ROOT/comparison/
+cp test/results-viewer.html $DEPLOY_ROOT/comparison/index.html
 cp -r dist $DEPLOY_ROOT/
 
 # Add a "VERSION" file containing the last git commit message
