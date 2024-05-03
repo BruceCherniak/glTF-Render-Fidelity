@@ -1,6 +1,6 @@
 # Render fidelity tools
 
-This package contains tools and testing processes to ensure high-fidelity 3D model rendering as well as compare rendering qualities across renderers. See the public fidelity comparisons [page](https://github.khronos.org/glTF-Render-Fidelity/comparisons/), or `test/results-viewer.html` if running this package locally.
+This package contains tools and testing processes to ensure high-fidelity 3D model rendering as well as compare rendering qualities across renderers. See the public fidelity comparisons [page](https://github.khronos.org/glTF-Render-Fidelity/comparison/), or `test/results-viewer.html` if running this package locally.
 
 ## Development
 
