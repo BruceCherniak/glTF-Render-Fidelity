@@ -15,16 +15,17 @@
 
 import {spawn} from 'child_process';
 import {promises as fs} from 'fs';
+import HTTPServer from 'http-server';
 import module from 'module';
 import {dirname, join, resolve} from 'path';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
+import {ArtifactCreator} from '../artifact-creator.js';
 import {ImageComparisonConfig} from '../common.js';
 import {ConfigReader} from '../config-reader.js';
 
 import {rendererOffline} from './render-goldens/renderer-offline.js';
-import {rendererScreenshot} from './render-goldens/renderer-screenshot.js';
 
 type CommandLineArgs =
     {
@@ -191,26 +192,34 @@ async function main() {
 
     const configReader = new ConfigReader(config);
 
-    for (const scenarioBase of scenarios) {
-      const scenarioName = scenarioBase.name;
-      const scenario = configReader.scenarioConfig(scenarioName);
-      const {model, lighting, dimensions, exclude} = scenario!;
-      const scenarioGoldensDirectory = join(goldensDirectory, scenarioName);
-      const {width, height} = dimensions;
+    const server = HTTPServer.createServer({root: '', cache: -1});
+    server.listen(args.port);
 
-      try {
-        await fs.mkdir(scenarioGoldensDirectory);
-      } catch (error) {
-        // Ignored...
-      }
+    for (const renderer of renderers) {
+      const {
+        name: rendererName,
+        description: rendererDescription,
+        scripts: scripts,
+        command: rendererCommand
+      } = renderer;
 
-      for (const renderer of renderers) {
-        const {
-          name: rendererName,
-          description: rendererDescription,
-          scripts: scripts,
-          command: rendererCommand
-        } = renderer;
+      const screenshotCreator = new ArtifactCreator(
+          config,
+          rootDirectory,
+          `http://localhost:${args.port}/test/renderers/${rendererName}/`);
+
+      for (const scenarioBase of scenarios) {
+        const scenarioName = scenarioBase.name;
+        const scenario = configReader.scenarioConfig(scenarioName);
+        const {model, lighting, dimensions, exclude} = scenario!;
+        const scenarioGoldensDirectory = join(goldensDirectory, scenarioName);
+        const {width, height} = dimensions;
+
+        try {
+          await fs.mkdir(scenarioGoldensDirectory);
+        } catch (error) {
+          // Ignored...
+        }
 
         if (exclude != null && exclude.includes(rendererName) ||
             rendererWhitelist != null && !rendererWhitelist.has(rendererName)) {
@@ -277,15 +286,12 @@ async function main() {
           }
         } else {
           try {
-            await rendererScreenshot(
-                config,
-                rootDirectory,
+            await screenshotCreator.captureScreenshot(
                 rendererName,
                 scenarioName,
+                dimensions,
                 goldenPath,
-                width,
-                height,
-                args.port,
+                -1,
                 args.quiet);
           } catch (error) {
             throw new Error(`Failed to update ${
@@ -293,7 +299,10 @@ async function main() {
           }
         }
       }
+
+      screenshotCreator.close();
     }
+    server.close();
   };
 
   updateScreenshots(config).then(() => exit(0)).catch((error) => {
