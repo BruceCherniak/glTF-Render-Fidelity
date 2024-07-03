@@ -33,6 +33,7 @@ mkdir pages/comparison/results
 mv test/results $DEPLOY_ROOT/comparison/
 cp test/results-viewer.html $DEPLOY_ROOT/comparison/index.html
 cp -r dist $DEPLOY_ROOT/
+cp -r glTF-Sample-Assets $DEPLOY_ROOT/
 
 # Add a "VERSION" file containing the last git commit message
 git log -n 1 > $DEPLOY_ROOT/VERSION
