@@ -16,25 +16,26 @@
 -->
 <!doctype html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>&lt;model-viewer&gt; Fidelity Tests</title>
-
   <style>
-    body { margin: 0; }
-    model-viewer { 
+    body {
+      margin: 0;
+    }
+
+    model-viewer {
       --progress-bar-color: transparent;
     }
   </style>
 </head>
+
 <body>
   <renderer-harness id="harness">
     <span slot="title">&lt;model-viewer&gt;</span>
-    <model-viewer id="modelViewer"
-        slot="renderer"
-        camera-controls
-        interaction-prompt="none">
+    <model-viewer id="modelViewer" slot="renderer" camera-controls interaction-prompt="none" tone-mapping="aces">
     </model-viewer>
   </renderer-harness>
   <script type="module" src="../../../dist/renderer-harness.js"></script>
@@ -46,20 +47,20 @@
     const harness = document.getElementById('harness');
     const modelViewer = document.getElementById('modelViewer');
     harness.addEventListener('scenario-change', () => {
-      const {scenario} = harness;
+      const { scenario } = harness;
       modelViewer.addEventListener('poster-dismissed', () => {
         // Sometimes the screenshot is taken when the poster hasn't faded away. 
         // This is a temporary workaround so that the screenshot is taken two frames after the poster-dismissed event fires.
         // TODO(sun765): Remove this when the bug is fixed. 
-        requestAnimationFrame(()=>{
-          requestAnimationFrame(()=>{
-            requestAnimationFrame(()=>{
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
               this.dispatchEvent(new CustomEvent('model-ready'));
             })
           })
         });
-      }, {once: true});
-      
+      }, { once: true });
+
       modelViewer.style.width = `${scenario.dimensions.width}px`;
       modelViewer.style.height = `${scenario.dimensions.height}px`;
 
@@ -68,13 +69,13 @@
       modelViewer.src = scenario.model;
 
       modelViewer.environmentImage = scenario.lighting;
-      modelViewer.skyboxImage = scenario.renderSkybox? scenario.lighting: null;
+      modelViewer.skyboxImage = scenario.renderSkybox ? scenario.lighting : null;
 
-      const {theta, phi, radius} = scenario.orbit;
+      const { theta, phi, radius } = scenario.orbit;
       modelViewer.minCameraOrbit = `auto auto ${radius}m`;
       modelViewer.maxCameraOrbit = `auto auto ${radius}m`;
       modelViewer.cameraOrbit = `${theta}deg ${phi}deg ${radius}m`;
-      const {x, y, z} = scenario.target;
+      const { x, y, z } = scenario.target;
       modelViewer.cameraTarget = `${x}m ${y}m ${z}m`;
       modelViewer.maxFieldOfView = `${scenario.verticalFoV}deg`;
       modelViewer.minFieldOfView = `${scenario.verticalFoV}deg`;
@@ -82,4 +83,5 @@
     });
   </script>
 </body>
+
 </html>
