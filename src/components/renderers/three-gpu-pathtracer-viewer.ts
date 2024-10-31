@@ -13,17 +13,16 @@
  * limitations under the License.
  */
 
-import {PathTracingRenderer, PathTracingSceneGenerator, PhysicalPathTracingMaterial} from 'three-gpu-pathtracer';
-import {WebGLRenderer, MeshBasicMaterial, PerspectiveCamera, ACESFilmicToneMapping, CustomBlending, MathUtils, Sphere, Box3, Object3D, Mesh, BufferAttribute, Group, DirectionalLight} from 'three';
-import {FullScreenQuad} from 'three/examples/jsm/postprocessing/Pass';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
-import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader';
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import * as MikkTSpace from 'three/examples/jsm/libs/mikktspace.module';
-
 import {css, html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
+import {ACESFilmicToneMapping, Box3, BufferAttribute, CustomBlending, DirectionalLight, Group, MathUtils, Mesh, MeshBasicMaterial, Object3D, PerspectiveCamera, Sphere, WebGLRenderer} from 'three';
+import {PathTracingRenderer, PathTracingSceneGenerator, PhysicalPathTracingMaterial} from 'three-gpu-pathtracer';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import * as MikkTSpace from 'three/examples/jsm/libs/mikktspace.module.js';
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js';
+import {FullScreenQuad} from 'three/examples/jsm/postprocessing/Pass.js';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 import {ScenarioConfig} from '../../common.js';
 
@@ -70,20 +69,22 @@ export class ThreePathTracerViewer extends LitElement {
 
   private[$initialize]() {
     this[$canvas] = this.shadowRoot!.querySelector('canvas');
-    this[$fsquad] = new FullScreenQuad(new MeshBasicMaterial({map: null, blending: CustomBlending}));
+    this[$fsquad] = new FullScreenQuad(
+        new MeshBasicMaterial({map: null, blending: CustomBlending}));
     this[$camera] = new PerspectiveCamera(50, 1, 0.01, 2000);
 
     this[$renderer] = new WebGLRenderer({canvas: this[$canvas] || undefined});
     this[$renderer].toneMapping = ACESFilmicToneMapping;
 
     this[$pathtracer] = new PathTracingRenderer(this[$renderer]);
-    this[$pathtracer].material = new PhysicalPathTracingMaterial( {
+    this[$pathtracer].material = new PhysicalPathTracingMaterial({
       filterGlossyFactor: 0.5,
-    } );
+    });
     this[$pathtracer].camera = this[$camera];
     this[$pathtracer].alpha = true;
 
-    this[$controls] = new OrbitControls(this[$camera], this[$renderer].domElement);
+    this[$controls] = new OrbitControls(
+        this[$camera], this[$renderer].domElement as unknown as HTMLElement);
     this[$controls].addEventListener('change', () => this[$pathtracer].reset());
   }
 
@@ -133,7 +134,7 @@ export class ThreePathTracerViewer extends LitElement {
 
     // generate tangents if they're not present
     await MikkTSpace.ready;
-    gltf.scene.traverse((c:Object3D) => {
+    gltf.scene.traverse((c: Object3D) => {
       if (c instanceof Mesh) {
         if (!c.geometry.hasAttribute('normal')) {
           c.geometry.computeVertexNormals();
@@ -141,11 +142,15 @@ export class ThreePathTracerViewer extends LitElement {
 
         if (!c.geometry.attributes.tangent) {
           if (c.geometry.hasAttribute('uv')) {
-            BufferGeometryUtils.computeMikkTSpaceTangents(c.geometry, MikkTSpace);
+            BufferGeometryUtils.computeMikkTSpaceTangents(
+                c.geometry, MikkTSpace);
           } else {
             c.geometry.setAttribute(
-              'tangent',
-              new BufferAttribute(new Float32Array(c.geometry.attributes.position.count * 4), 4, false),
+                'tangent',
+                new BufferAttribute(
+                    new Float32Array(c.geometry.attributes.position.count * 4),
+                    4,
+                    false),
             );
           }
         }
@@ -165,7 +170,10 @@ export class ThreePathTracerViewer extends LitElement {
     camera.far = 2 * radius;
     camera.updateProjectionMatrix();
 
-    camera.position.setFromSphericalCoords(orbit.radius, MathUtils.DEG2RAD * orbit.phi, MathUtils.DEG2RAD * orbit.theta);
+    camera.position.setFromSphericalCoords(
+        orbit.radius,
+        MathUtils.DEG2RAD * orbit.phi,
+        MathUtils.DEG2RAD * orbit.theta);
     camera.fov = verticalFoV;
     camera.updateProjectionMatrix();
     controls.update();
@@ -183,17 +191,18 @@ export class ThreePathTracerViewer extends LitElement {
     // update bvh and geometry info
     ptMaterial.bvh.updateFrom(bvh);
     ptMaterial.attributesArray.updateFrom(
-      geometry.attributes.normal,
-      geometry.attributes.tangent,
-      geometry.attributes.uv,
-      geometry.attributes.color,
+        geometry.attributes.normal,
+        geometry.attributes.tangent,
+        geometry.attributes.uv,
+        geometry.attributes.color,
     );
     ptMaterial.filterGlossyFactor = 0.5;
     ptMaterial.bounces = 8;
     ptMaterial.backgroundAlpha = renderSkybox ? 1 : 0;
 
     // update material and texture info
-    ptMaterial.materialIndexAttribute.updateFrom(bvh.geometry.attributes.materialIndex);
+    ptMaterial.materialIndexAttribute.updateFrom(
+        bvh.geometry.attributes.materialIndex);
     ptMaterial.textures.setTextures(renderer, 2048, 2048, textures);
     ptMaterial.materials.updateFrom(materials, textures);
     ptMaterial.lights.updateFrom(lights);
@@ -222,7 +231,8 @@ export class ThreePathTracerViewer extends LitElement {
       renderer.autoClear = false;
 
       if (!eventBroadcast && pathtracer.samples >= MAX_SAMPLES) {
-        const ev = new CustomEvent('model-visibility', {detail: {visible: true}});
+        const ev =
+            new CustomEvent('model-visibility', {detail: {visible: true}});
         this.dispatchEvent(ev);
         eventBroadcast = true;
       }

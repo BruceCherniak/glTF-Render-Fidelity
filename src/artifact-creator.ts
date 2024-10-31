@@ -14,7 +14,7 @@
  */
 
 import {promises as fs} from 'fs';
-import mkdirp from 'mkdirp';
+import {mkdirp} from 'mkdirp';
 import {join, resolve} from 'path';
 import pngjs from 'pngjs';
 import puppeteer, {Browser} from 'puppeteer';
@@ -33,8 +33,7 @@ export interface ScenarioRecord extends ScenarioConfig {
 
 export class ArtifactCreator {
   private[$configReader]: ConfigReader = new ConfigReader(this.config);
-  private browser: Browser|undefined = undefined;
-  private pagePromise: Promise<any>|undefined = undefined;
+  private browser: Browser|null = null;
 
   constructor(
       protected config: ImageComparisonConfig, protected rootDirectory: string,
@@ -43,15 +42,9 @@ export class ArtifactCreator {
   }
 
   async close() {
-    if (this.pagePromise !== undefined) {
-      const page = await this.pagePromise;
-      await page.close();
-      this.pagePromise = undefined;
-    }
-
-    if (this.browser !== undefined) {
+    if (this.browser != null) {
       await this.browser.close();
-      this.browser = undefined;
+      this.browser = null;
     }
   }
   protected get outputDirectory(): string {
@@ -142,13 +135,17 @@ export class ArtifactCreator {
     console.log(`start compare ${renderer}'s golden with ${
         renderer}'s screenshot generated from fidelity test:`);
 
-    let screenshot;
+    let screenshot: Uint8Array|undefined;
     try {
       // set the output path to an empty string to tell puppeteer to not save
       // the screenshot image
       screenshot = await this.captureScreenshot(
           renderer, scenarioName, dimensions, '', 60, quiet);
     } catch (error) {
+      if (this.browser != null) {
+        await this.browser.close();
+        this.browser = null;
+      }
       throw new Error(`❌ Failed to capture ${renderer}'s screenshot of ${
           scenarioName}. Error message: ${error.message}`);
     }
@@ -157,8 +154,9 @@ export class ArtifactCreator {
       throw new Error(`❌ ${renderer}'s screenshot of ${
           scenarioName} is not captured correctly (value is null).`);
     }
+    const buffer = Buffer.from(screenshot);
     const screenshotImage =
-        new Uint8ClampedArray(pngjs.PNG.sync.read(screenshot as Buffer).data);
+        new Uint8ClampedArray(pngjs.PNG.sync.read(buffer).data);
 
     const rendererIndex = 0;
     const rendererGoldenPath = join(
@@ -301,14 +299,12 @@ export class ArtifactCreator {
     }
 
 
-    if (this.browser == undefined) {
+    if (this.browser == null) {
       console.log(`🚀 Launching browser`);
-      this.browser = await puppeteer.launch({headless: quiet ? 'new' : false});
-      this.pagePromise = this.browser.newPage();
+      this.browser = await puppeteer.launch({headless: quiet});
     }
 
-    const page = await this.pagePromise;
-    this.pagePromise = undefined;
+    const page = await this.browser.newPage();
 
     const url = `${this.baseUrl}?hide-ui&config=../../config.json&scenario=${
         encodeURIComponent(scenarioName)}`;
@@ -373,7 +369,7 @@ export class ArtifactCreator {
     if (evaluateError) {
       console.log(evaluateError);
       await this.browser.close();
-      this.browser = undefined;
+      this.browser = null;
       throw new Error(evaluateError);
     }
 
@@ -389,7 +385,6 @@ export class ArtifactCreator {
         await page.screenshot({path: outputPath, omitBackground: true});
 
     page.close();
-    this.pagePromise = this.browser.newPage();
 
     return screenshot;
   }

@@ -16,7 +16,7 @@
 import HTTPServer from 'http-server';
 import module from 'module';
 import {dirname, join, resolve} from 'path';
-import rimraf from 'rimraf';
+import {rimraf} from 'rimraf';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 

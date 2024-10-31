@@ -16,9 +16,7 @@ jobs:
         lfs: true
         submodules: recursive
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'
+    - uses: actions/setup-node@v4
 
     - name: NPM install
       run: npm ci
@@ -28,7 +26,7 @@ jobs:
 
     - name: Generate fidelity artifacts 
       continue-on-error: true
-      uses: GabrielBB/xvfb-action@v1.0
+      uses: coactions/setup-xvfb@v1
       with:
         run: npm run test
 
@@ -36,7 +34,7 @@ jobs:
       run: ./scripts/ci-before-deploy.sh
 
     - name: Deploy to Github Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
