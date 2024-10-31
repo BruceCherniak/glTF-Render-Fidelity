@@ -83,8 +83,8 @@ export class ThreePathTracerViewer extends LitElement {
     this[$pathtracer].camera = this[$camera];
     this[$pathtracer].alpha = true;
 
-    this[$controls] =
-        new OrbitControls(this[$camera], this[$renderer].domElement);
+    this[$controls] = new OrbitControls(
+        this[$camera], this[$renderer].domElement as unknown as HTMLElement);
     this[$controls].addEventListener('change', () => this[$pathtracer].reset());
   }
 
