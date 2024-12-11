@@ -136,16 +136,8 @@ def main():
     # multiply resolution by 2 to match other renderers
     width = scenario["dimensions"]["width"] * 2
     height = scenario["dimensions"]["height"] * 2
-    scenePath = (
-        packages_directory
-        + "shared-assets"
-        + scenario["model"].split("shared-assets")[1]
-    )
-    iblPath = (
-        packages_directory
-        + "shared-assets"
-        + scenario["lighting"].split("shared-assets")[1]
-    )
+    scenePath = os.path.join(packages_directory, scenario["model"])
+    iblPath = os.path.join(packages_directory, scenario["lighting"])
     render_skybox = scenario["renderSkybox"]
     target = np.array(
         [scenario["target"]["x"], scenario["target"]["y"], scenario["target"]["z"]]
